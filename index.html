@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة مخاطر السكري</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            direction: rtl;
+            transition: background-color 0.5s ease;
+        }
+        h1 {
+            color: #1B4F72;
+        }
+        .slider-container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #ebf5fb;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .slider-label {
+            margin: 10px;
+            font-size: 1.2em;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: #1B4F72;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #154360;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>حاسبة مخاطر السكري</h1>
+    <p>قم بتعديل المؤشرات لمعرفة خطر إصابتك بالسكري</p>
+
+    <div class="slider-container">
+        <div class="slider-label">العمر: <span id="ageDisplay">30</span> سنة</div>
+        <input type="range" id="ageSlider" min="18" max="80" value="30" oninput="updateDisplay('ageSlider', 'ageDisplay')">
+
+        <div class="slider-label">مؤشر كتلة الجسم (BMI): <span id="bmiDisplay">24</span></div>
+        <input type="range" id="bmiSlider" min="15" max="40" value="24" oninput="updateDisplay('bmiSlider', 'bmiDisplay')">
+
+        <div class="slider-label">سكر الدم (mg/dL): <span id="bgDisplay">90</span></div>
+        <input type="range" id="bgSlider" min="70" max="200" value="90" oninput="updateDisplay('bgSlider', 'bgDisplay')">
+
+        <div class="slider-label">ضغط الدم (mmHg): <span id="bpDisplay">120</span></div>
+        <input type="range" id="bpSlider" min="90" max="180" value="120" oninput="updateDisplay('bpSlider', 'bpDisplay')">
+    </div>
+
+    <button onclick="calculateRisk()">احسب المخاطر</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function updateDisplay(sliderId, displayId) {
+            document.getElementById(displayId).textContent = document.getElementById(sliderId).value;
+        }
+
+        function calculateRisk() {
+            let age = parseInt(document.getElementById("ageSlider").value);
+            let bmi = parseInt(document.getElementById("bmiSlider").value);
+            let bg = parseInt(document.getElementById("bgSlider").value);
+            let bp = parseInt(document.getElementById("bpSlider").value);
+            let resultText = "";
+            let bgColor = "";
+
+            // Determine risk level based on inputs
+            if (age >= 45 || bmi >= 30 || bg >= 126 || bp >= 140) {
+                resultText = "لديك عوامل خطر عالية للإصابة بالسكري. يُنصح بمراجعة الطبيب لفحص أكثر تفصيلاً.";
+                resultText += "<br> نصائح: اتبع نظام غذائي صحي، حافظ على نشاط بدني منتظم، وابقَ على تواصل مع طبيبك.";
+                bgColor = "#C0392B"; // Red for high risk
+            } else if (age >= 35 || bmi >= 25 || bg >= 100 || bp >= 130) {
+                resultText = "لديك عوامل خطر متوسطة. ننصحك بالمتابعة واتباع نمط حياة صحي.";
+                resultText += "<br> نصائح: مارس الرياضة بانتظام، قلل من تناول السكر، وراقب صحتك.";
+                bgColor = "#F39C12"; // Orange for medium risk
+            } else {
+                resultText = "لديك عوامل خطر منخفضة. حافظ على نمط حياة صحي واستمر على هذا النحو!";
+                resultText += "<br> نصائح: تناول طعامًا متوازنًا، وابقَ نشيطًا، وتابع وزنك.";
+                bgColor = "#1B9C6C"; // Green for low risk
+            }
+
+            // Update result text and background color based on risk level
+            document.getElementById("result").innerHTML = resultText;
+            document.body.style.backgroundColor = bgColor;
+        }
+    </script>
+
+</body>
+</html>
